@@ -9,9 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-/* ================================================
-   BASE
-   ================================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -43,9 +40,6 @@ body::before {
   z-index: 0;
 }
 
-/* ================================================
-   PAGE
-   ================================================ */
 .page {
   position: relative;
   z-index: 1;
@@ -62,9 +56,7 @@ body::before {
   overflow: visible;
 }
 
-/* ================================================
-   HERO TEXT
-   ================================================ */
+/* ── Hero ── */
 .hero-text {
   flex-shrink: 0;
   text-align: center;
@@ -72,6 +64,7 @@ body::before {
   flex-direction: column;
   align-items: center;
   gap: 28px;
+  transition: opacity .35s ease, transform .35s ease;
 }
 
 .title {
@@ -82,7 +75,6 @@ body::before {
 }
 
 .t1 {
-  font-family: 'Nunito', sans-serif;
   font-size: clamp(22px, 3.8vw, 38px);
   font-weight: 400;
   color: rgba(42,14,14,.45);
@@ -92,11 +84,9 @@ body::before {
   transform: translateY(12px);
   transition: opacity .65s ease, transform .65s ease;
 }
-
 .t1.visible { opacity: 1; transform: translateY(0); }
 
 .t2 {
-  font-family: 'Nunito', sans-serif;
   font-size: clamp(42px, 7.5vw, 72px);
   font-weight: 900;
   color: var(--primary);
@@ -105,10 +95,7 @@ body::before {
   line-height: 1;
   opacity: 0;
 }
-
-.t2.visible {
-  animation: t2-stamp .6s cubic-bezier(.22,1,.36,1) forwards;
-}
+.t2.visible { animation: t2-stamp .6s cubic-bezier(.22,1,.36,1) forwards; }
 
 @keyframes t2-stamp {
   0%   { opacity: 0; transform: scale(1.14); filter: blur(6px); }
@@ -126,23 +113,18 @@ body::before {
   transform: translateY(10px);
   transition: opacity .6s ease, transform .6s ease;
 }
-
 .event-meta.visible { opacity: 1; transform: translateY(0); }
 
 .meta-line {
-  font-family: 'Nunito', sans-serif;
   font-size: clamp(10px, 1.1vw, 12px);
   font-weight: 400;
   letter-spacing: .18em;
   text-transform: uppercase;
   color: rgba(179,61,92,.55);
 }
-
 .meta-line.meta-place { color: rgba(179,61,92,.35); }
 
-/* ================================================
-   FOLDER WRAP
-   ================================================ */
+/* ── Folder wrap ── */
 .folder-wrap {
   flex-shrink: 0;
   position: relative;
@@ -150,10 +132,7 @@ body::before {
   opacity: 0;
   margin-top: clamp(168px, 23vh, 216px);
 }
-
-.folder-wrap.drop-in {
-  animation: folder-drop .9s cubic-bezier(.22,1,.36,1) forwards;
-}
+.folder-wrap.drop-in { animation: folder-drop .9s cubic-bezier(.22,1,.36,1) forwards; }
 
 @keyframes folder-drop {
   0%   { opacity: 0; transform: translateY(-26px); }
@@ -177,6 +156,7 @@ body::before {
   height: 0;
 }
 
+/* ── Photo card ── */
 .photo-card {
   position: absolute;
   bottom: 0;
@@ -198,14 +178,12 @@ body::before {
   -webkit-tap-highlight-color: transparent;
   cursor: default;
 }
-
 .photo-card.dragging   { transition: none !important; }
 .photo-card.open-state { cursor: grab; }
 .photo-card.open-state:active { cursor: grabbing; }
 
 .photo-card img {
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   object-fit: cover;
   pointer-events: none;
   user-select: none;
@@ -214,6 +192,7 @@ body::before {
   display: block;
 }
 
+/* ── Folder back ── */
 .folder-back {
   position: absolute;
   bottom: 0; left: 50%;
@@ -222,7 +201,6 @@ body::before {
   pointer-events: none;
   transition: opacity .4s ease, transform .4s ease;
 }
-
 .folder-back.hidden {
   opacity: 0;
   transform: translateX(-50%) scale(.92);
@@ -250,6 +228,7 @@ body::before {
     0 4px 14px rgba(179,61,92,.10);
 }
 
+/* ── Folder front ── */
 .folder-front {
   position: absolute;
   bottom: 0; left: 50%;
@@ -320,7 +299,6 @@ body::before {
 }
 
 .folder-pill span {
-  font-family: 'Nunito', sans-serif;
   color: var(--accent-fg);
   font-size: 11px;
   font-weight: 600;
@@ -328,19 +306,19 @@ body::before {
   white-space: nowrap;
 }
 
+/* ── Drag hint ── */
 .drag-hint {
   position: fixed;
   bottom: max(28px, env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%) translateY(10px);
-  z-index: 100;
+  z-index: 300;
   padding: 9px 20px;
   border-radius: 50px;
   background: rgba(255,128,166,.10);
   border: 1px solid rgba(255,128,166,.25);
   backdrop-filter: blur(8px);
   color: rgba(179,61,92,.50);
-  font-family: 'Nunito', sans-serif;
   font-size: 10px;
   font-weight: 500;
   letter-spacing: .13em;
@@ -349,19 +327,41 @@ body::before {
   opacity: 0;
   transition: opacity .45s ease, transform .45s ease;
   pointer-events: none;
-  user-select: none;
 }
-
 .drag-hint.visible {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
 
 /* ================================================
-   MOBILE
+   MOBILE — carousel mode
    ================================================ */
 @media (max-width: 600px) {
-  .photo-card   { width: 152px; height: 196px; left: -76px; }
+
+  /* Hero fades when gallery is open */
+  .hero-text.gallery-open {
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+  }
+
+  /* Cards become full-screen-ish when in carousel */
+  .photo-card.carousel-mode {
+    position: fixed !important;
+    bottom: auto !important;
+    left: 50% !important;
+    top: 50% !important;
+    width: 82vw !important;
+    height: auto !important;
+    aspect-ratio: 152 / 196 !important;
+    border-radius: 10px !important;
+    transform-origin: center center !important;
+    box-shadow:
+      0 16px 48px rgba(179,61,92,.22),
+      0 6px 18px rgba(0,0,0,.10) !important;
+  }
+
+  /* Folder smaller on mobile */
   .photo-stack  { bottom: 40px; }
   .folder-scene { width: 270px; height: 154px; }
   .folder-back  { width: 220px; height: 154px; }
@@ -374,13 +374,38 @@ body::before {
   .meta-line    { font-size: 11px; letter-spacing: .14em; }
 }
 
+/* ── Carousel dots ── */
+.carousel-dots {
+  position: fixed;
+  bottom: max(66px, env(safe-area-inset-bottom) + 40px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 300;
+  opacity: 0;
+  transition: opacity .4s ease;
+  pointer-events: none;
+}
+.carousel-dots.visible { opacity: 1; }
+
+.dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,128,166,.35);
+  transition: background .3s ease, transform .3s ease;
+}
+.dot.active {
+  background: #ff80a6;
+  transform: scale(1.5);
+}
+
+/* Landscape phones */
 @media (max-height: 620px) {
-  .page        { padding-top: 20px; padding-bottom: 16px; }
-  .hero-text   { gap: 16px; }
-  .folder-wrap { margin-top: 40px; }
-  .t2          { font-size: clamp(32px, 7vw, 56px); }
-  .photo-card  { height: 180px; }
-  .folder-scene { height: 140px; }
+  .page        { padding-top: 16px; padding-bottom: 12px; }
+  .hero-text   { gap: 14px; }
+  .folder-wrap { margin-top: 36px; }
+  .t2          { font-size: clamp(28px, 7vw, 48px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -395,7 +420,7 @@ body::before {
 
   <div class="page">
 
-    <header class="hero-text">
+    <header class="hero-text" id="heroText">
       <h1 class="title">
         <span class="t1">Ahora sí puedo decir</span>
         <span class="t2" id="t2hero">que es viral</span>
@@ -433,11 +458,19 @@ body::before {
 
   </div>
 
-  <div class="drag-hint" id="dragHint">arrastrá una foto hacia abajo para cerrar</div>
+  <div class="carousel-dots" id="carouselDots">
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </div>
+
+  <div class="drag-hint" id="dragHint">arrastrá para navegar · abajo para cerrar</div>
 
   <script>
 document.addEventListener('DOMContentLoaded', () => {
 
+  /* ── Entrance ── */
   const t1      = document.querySelector('.t1');
   const t2      = document.getElementById('t2hero');
   const meta    = document.getElementById('eventMeta');
@@ -448,48 +481,39 @@ document.addEventListener('DOMContentLoaded', () => {
   if (meta)    setTimeout(() => meta.classList.add('visible'),    620);
   if (folderW) setTimeout(() => folderW.classList.add('drop-in'), 820);
 
+  /* ── Refs ── */
+  const heroText    = document.getElementById('heroText');
   const folderBack  = document.getElementById('folderBack');
   const folderFront = document.getElementById('folderFront');
   const dragHint    = document.getElementById('dragHint');
+  const dotsEl      = document.getElementById('carouselDots');
+  const dotEls      = Array.from(dotsEl.querySelectorAll('.dot'));
   const cards       = Array.from(document.querySelectorAll('.photo-card'));
   const N           = cards.length;
 
-  let isOpen = false;
+  /* ── State ── */
+  let isOpen         = false;
+  let currentCardIdx = 0;
 
   const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-  const FAN = [
-    { rot: -8,  dy: -6  },
-    { rot: -2,  dy:  8  },
-    { rot:  4,  dy: -4  },
-    { rot:  9,  dy:  5  },
-    { rot: -5,  dy:  3  },
-    { rot:  2,  dy: -7  },
-    { rot:  7,  dy:  1  },
-    { rot: -3,  dy:  6  },
-  ];
-
   function isMobile() { return window.innerWidth < 600; }
 
-  function getClientY(e) {
-    if (e.touches && e.touches.length > 0)               return e.touches[0].clientY;
-    if (e.changedTouches && e.changedTouches.length > 0) return e.changedTouches[0].clientY;
-    return e.clientY;
-  }
+  /* ── FAN data (desktop) ── */
+  const FAN = [
+    { rot: -8, dy: -6 }, { rot: -2, dy: 8 },
+    { rot:  4, dy: -4 }, { rot:  9, dy: 5 },
+  ];
+
+  /* ── Helpers ── */
+  function centreOffset(idx) { return idx - (N - 1) / 2; }
 
   function getSpread() {
     const vw = window.innerWidth;
-    if (vw < 600) {
-      const cardW = 152;
-      const total = vw * 0.88 - cardW;
-      return Math.max(58, total / Math.max(N - 1, 1));
-    }
     const cardW = 188;
     return Math.max(cardW * 0.75, Math.min(cardW * 0.90, vw * 0.13));
   }
 
-  function centreOffset(idx) { return idx - (N - 1) / 2; }
-
+  /* ── Transforms ── */
   function stackedTransform(idx, hovered) {
     const o  = idx - Math.floor(N / 2);
     const tx = hovered ? o * 26 : o * 3;
@@ -499,14 +523,20 @@ document.addEventListener('DOMContentLoaded', () => {
     return `translateX(${tx}px) translateY(${ty}px) rotate(${r}deg) scale(${sc})`;
   }
 
-  function openTransform(idx) {
-    const o           = centreOffset(idx);
-    const spread      = getSpread();
+  function fanTransform(idx) {
     const { rot, dy } = FAN[idx % FAN.length];
-    const baseLift    = isMobile() ? -14 : -10;
-    return `translateX(${(o * spread).toFixed(1)}px) translateY(${baseLift + dy}px) rotate(${rot}deg) scale(1)`;
+    return `translateX(${(centreOffset(idx) * getSpread()).toFixed(1)}px) translateY(${-10 + dy}px) rotate(${rot}deg) scale(1)`;
   }
 
+  /* carousel: card offset in viewport, centred at top:50% left:50% */
+  function carouselTransform(cardIdx, centerIdx, extraY = 0) {
+    const offset = cardIdx - centerIdx;
+    const scale  = offset === 0 ? 1 : 0.86;
+    const rot    = offset === 0 ? 1 : offset * 5;
+    return `translate(calc(-50% + ${offset * 108}vw), calc(-50% + ${extraY}px)) rotate(${rot}deg) scale(${scale})`;
+  }
+
+  /* ── Apply stacked ── */
   function applyStacked(hovered = false) {
     cards.forEach((c, i) => {
       c.style.transition = 'transform .5s cubic-bezier(.34,1.56,.64,1)';
@@ -515,25 +545,63 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function applyOpen() {
-    const stagger = isMobile() ? 50 : 65;
-    cards.forEach((c, i) => {
-      c.style.transition = `transform .55s cubic-bezier(.34,1.56,.64,1) ${i * stagger}ms`;
-      c.style.transform  = openTransform(i);
-      c.style.zIndex     = 30 + i;
-    });
+  applyStacked();
+
+  /* ── OPEN ── */
+  function openFolder() {
+    isMobile() ? openMobile() : openDesktop();
   }
 
-  function openFolder() {
+  function openDesktop() {
     isOpen = true;
     folderFront.classList.add('is-open');
     folderBack.classList.add('hidden');
-    applyOpen();
-    cards.forEach(c => c.classList.add('open-state'));
+    cards.forEach((c, i) => {
+      c.style.transition = `transform .55s cubic-bezier(.34,1.56,.64,1) ${i * 65}ms`;
+      c.style.transform  = fanTransform(i);
+      c.style.zIndex     = 30 + i;
+      c.classList.add('open-state');
+    });
     dragHint.classList.add('visible');
   }
 
-  function closeFolder() {
+  function openMobile() {
+    isOpen         = true;
+    currentCardIdx = 0;
+
+    folderFront.classList.add('is-open');
+    folderBack.classList.add('hidden');
+    heroText.classList.add('gallery-open');
+
+    /* Position cards off-screen below before switching to fixed */
+    cards.forEach((c, i) => {
+      c.classList.add('carousel-mode');
+      c.style.transition = 'none';
+      c.style.opacity    = '0';
+      c.style.transform  = carouselTransform(i, 0, 80);
+      c.style.zIndex     = i === 0 ? 60 : 30 + i;
+    });
+
+    /* Let fixed positioning settle, then animate in */
+    setTimeout(() => {
+      cards.forEach((c, i) => {
+        c.style.transition = `transform .6s cubic-bezier(.22,1,.36,1) ${i * 65}ms,`
+                           + `opacity .4s ease ${i * 55}ms`;
+        c.style.opacity    = '1';
+        c.style.transform  = carouselTransform(i, 0);
+      });
+      updateDots(0);
+      dotsEl.classList.add('visible');
+      dragHint.classList.add('visible');
+    }, 40);
+  }
+
+  /* ── CLOSE ── */
+  function closeFolder(extraY) {
+    isMobile() ? closeMobile(extraY) : closeDesktop();
+  }
+
+  function closeDesktop() {
     isOpen = false;
     cards.forEach(c => {
       c.style.transition = 'transform .5s cubic-bezier(.34,1.56,.64,1)';
@@ -549,8 +617,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 300);
   }
 
-  applyStacked();
+  function closeMobile(extraY = 0) {
+    isOpen = false;
+    cards.forEach((c, i) => {
+      const offset = i - currentCardIdx;
+      c.style.transition = `transform .38s ease ${i * 20}ms, opacity .3s ease ${i * 20}ms`;
+      c.style.transform  = `translate(calc(-50% + ${offset * 108}vw), calc(-50% + ${80 + extraY}px)) scale(${offset === 0 ? 1 : 0.86})`;
+      c.style.opacity    = '0';
+    });
+    dotsEl.classList.remove('visible');
+    dragHint.classList.remove('visible');
+    heroText.classList.remove('gallery-open');
 
+    setTimeout(() => {
+      if (isOpen) return;
+      cards.forEach(c => {
+        c.classList.remove('carousel-mode');
+        c.style.opacity = '';
+      });
+      applyStacked(false);
+      folderFront.classList.remove('is-open');
+      folderBack.classList.remove('hidden');
+    }, 440);
+  }
+
+  /* ── Carousel navigation ── */
+  function goToCard(newIdx) {
+    newIdx         = Math.max(0, Math.min(N - 1, newIdx));
+    currentCardIdx = newIdx;
+    cards.forEach((c, i) => {
+      c.style.transition = 'transform .38s cubic-bezier(.25,.8,.25,1)';
+      c.style.transform  = carouselTransform(i, currentCardIdx);
+      c.style.zIndex     = i === currentCardIdx ? 60 : 30 + i;
+    });
+    updateDots(currentCardIdx);
+  }
+
+  function updateDots(active) {
+    dotEls.forEach((d, i) => d.classList.toggle('active', i === active));
+  }
+
+  /* ── Hover (desktop/mouse only) ── */
   if (canHover) {
     folderFront.addEventListener('mouseenter', () => {
       if (isOpen) return;
@@ -564,66 +671,111 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  /* ── Click / tap to open ── */
   folderFront.addEventListener('click', () => {
     if (!isOpen) openFolder();
   });
 
+  /* ── Desktop drag-to-close ── */
   const drag = { active: false, card: null, idx: 0, fan: null, startY: 0 };
 
-  function dragThreshold() { return isMobile() ? 62 : 90; }
-
-  function onDown(e) {
-    if (!isOpen) return;
+  function onMouseDown(e) {
+    if (!isOpen || isMobile()) return;
     drag.active = true;
     drag.card   = e.currentTarget;
     drag.idx    = parseInt(drag.card.dataset.idx, 10);
     drag.fan    = FAN[drag.idx % FAN.length];
-    drag.startY = getClientY(e);
+    drag.startY = e.clientY;
     drag.card.classList.add('dragging');
     drag.card.style.zIndex = 150;
     e.preventDefault();
   }
 
-  function onMove(e) {
+  function onMouseMove(e) {
     if (!drag.active) return;
-    e.preventDefault();
-    const deltaY   = getClientY(e) - drag.startY;
-    const tx       = centreOffset(drag.idx) * getSpread();
-    const baseLift = isMobile() ? -14 : -10;
-    const rot      = drag.fan.rot + (deltaY > 0 ? Math.min(deltaY * 0.05, 12) : 0);
+    const dy  = e.clientY - drag.startY;
+    const tx  = centreOffset(drag.idx) * getSpread();
+    const rot = drag.fan.rot + (dy > 0 ? Math.min(dy * 0.05, 12) : 0);
     drag.card.style.transform =
-      `translateX(${tx.toFixed(1)}px) translateY(${baseLift + drag.fan.dy + deltaY}px) rotate(${rot}deg) scale(1.07)`;
+      `translateX(${tx.toFixed(1)}px) translateY(${-10 + drag.fan.dy + dy}px) rotate(${rot}deg) scale(1.07)`;
   }
 
-  function onUp(e) {
+  function onMouseUp(e) {
     if (!drag.active) return;
-    const deltaY = getClientY(e) - drag.startY;
+    const dy = e.clientY - drag.startY;
     drag.card.classList.remove('dragging');
     drag.card.style.zIndex = 30 + drag.idx;
-
-    if (deltaY > dragThreshold()) {
-      closeFolder();
-    } else {
+    if (dy > 90) closeFolder();
+    else {
       drag.card.style.transition = 'transform .5s cubic-bezier(.34,1.56,.64,1)';
-      drag.card.style.transform  = openTransform(drag.idx);
+      drag.card.style.transform  = fanTransform(drag.idx);
     }
-
     drag.active = false;
     drag.card   = null;
-    drag.fan    = null;
   }
 
-  cards.forEach(c => {
-    c.addEventListener('mousedown',  onDown, { passive: false });
-    c.addEventListener('touchstart', onDown, { passive: false });
+  cards.forEach(c => c.addEventListener('mousedown', onMouseDown, { passive: false }));
+  window.addEventListener('mousemove', onMouseMove);
+  window.addEventListener('mouseup',   onMouseUp);
+
+  /* ── Mobile carousel swipe ── */
+  const ct = { startX: 0, startY: 0, dir: null, active: false };
+
+  document.addEventListener('touchstart', e => {
+    if (!isOpen || !isMobile()) return;
+    ct.startX = e.touches[0].clientX;
+    ct.startY = e.touches[0].clientY;
+    ct.dir    = null;
+    ct.active = true;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', e => {
+    if (!isOpen || !isMobile() || !ct.active) return;
+    const dx = e.touches[0].clientX - ct.startX;
+    const dy = e.touches[0].clientY - ct.startY;
+
+    if (!ct.dir && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
+      ct.dir = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
+    }
+
+    /* Live drag-down feedback */
+    if (ct.dir === 'v' && dy > 0) {
+      e.preventDefault();
+      cards.forEach((c, i) => {
+        const offset = i - currentCardIdx;
+        c.style.transition = 'none';
+        c.style.transform  = `translate(calc(-50% + ${offset * 108}vw), calc(-50% + ${dy}px)) rotate(${offset === 0 ? 1 : offset * 5}deg) scale(${offset === 0 ? 1 : 0.86})`;
+      });
+    }
+  }, { passive: false });
+
+  document.addEventListener('touchend', e => {
+    if (!isOpen || !isMobile() || !ct.active) return;
+    ct.active = false;
+    const dx = e.changedTouches[0].clientX - ct.startX;
+    const dy = e.changedTouches[0].clientY - ct.startY;
+
+    if (!ct.dir) return;
+
+    if (ct.dir === 'h') {
+      if      (dx < -50) goToCard(currentCardIdx + 1);
+      else if (dx >  50) goToCard(currentCardIdx - 1);
+      else               goToCard(currentCardIdx);   /* snap back */
+    } else if (ct.dir === 'v') {
+      if (dy > 72) closeMobile(dy);
+      else         goToCard(currentCardIdx);          /* snap back */
+    }
+  }, { passive: true });
+
+  /* ── Resize ── */
+  window.addEventListener('resize', () => {
+    if (isOpen && !isMobile()) {
+      cards.forEach((c, i) => {
+        c.style.transition = `transform .5s cubic-bezier(.34,1.56,.64,1) ${i * 65}ms`;
+        c.style.transform  = fanTransform(i);
+      });
+    }
   });
-
-  window.addEventListener('mousemove', onMove, { passive: false });
-  window.addEventListener('touchmove', onMove, { passive: false });
-  window.addEventListener('mouseup',   onUp);
-  window.addEventListener('touchend',  onUp);
-
-  window.addEventListener('resize', () => { if (isOpen) applyOpen(); });
 
 });
   </script>
