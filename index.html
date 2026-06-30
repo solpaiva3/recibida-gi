@@ -120,7 +120,7 @@ body::before {
 /* ===== PHOTO CARD (desktop fan) ===== */
 .photo-card {
   position: absolute; bottom: 0; left: -94px;
-  width: 188px; height: 242px; border-radius: 3px; overflow: hidden;
+  width: 188px; height: 242px; border-radius: 0; overflow: hidden;
   box-shadow: 0 6px 20px rgba(179,61,92,.14), 0 2px 6px rgba(179,61,92,.08);
   transform-origin: bottom center;
   transition: transform .5s cubic-bezier(.34,1.56,.64,1);
@@ -295,7 +295,7 @@ body::before {
   max-height: 65vh;
   width: auto; height: auto;
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: 0;
   box-shadow: 0 24px 64px rgba(179,61,92,.22), 0 8px 24px rgba(0,0,0,.09);
   user-select: none; -webkit-user-drag: none;
   pointer-events: none;
@@ -318,6 +318,33 @@ body::before {
   letter-spacing: .12em; text-transform: uppercase;
   color: rgba(179,61,92,.35);
   flex-shrink: 0;
+}
+
+/* ── Mobile idle animations ── */
+@media (max-width:600px) {
+  /* Folder gently floats up and down */
+  @keyframes folder-idle {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-7px); }
+  }
+  .folder-wrap.idle {
+    animation: folder-idle 3.6s ease-in-out infinite;
+  }
+
+  /* Front flap pulses its glow */
+  @keyframes glow-pulse {
+    0%, 100% {
+      filter: drop-shadow(0 -8px 22px rgba(255,128,166,.38))
+              drop-shadow(0 5px 16px rgba(179,61,92,.12));
+    }
+    50% {
+      filter: drop-shadow(0 -20px 40px rgba(255,128,166,.70))
+              drop-shadow(0 8px 22px rgba(179,61,92,.24));
+    }
+  }
+  .folder-front.glow:not(.is-open) {
+    animation: glow-pulse 3.6s ease-in-out infinite;
+  }
 }
 
 /* ── Landscape phones ── */
@@ -351,10 +378,10 @@ body::before {
     <div class="folder-wrap" id="folderWrap">
       <div class="folder-scene">
         <div class="photo-stack" id="photoStack">
-          <div class="photo-card" data-idx="0"><img src="assets/foto%20gi%203.png"  alt="Gi" draggable="false"></div>
-          <div class="photo-card" data-idx="1"><img src="assets/foto%20gi%202.png" alt="Gi" draggable="false"></div>
-          <div class="photo-card" data-idx="2"><img src="assets/foto%20gi.png"      alt="Gi" draggable="false"></div>
-          <div class="photo-card" data-idx="3"><img src="assets/foto%20gi%204.png" alt="Gi" draggable="false"></div>
+          <div class="photo-card" data-idx="0"><img src="assets/foto%20gi%204.png" alt="Gi" draggable="false"></div>
+          <div class="photo-card" data-idx="1"><img src="assets/foto%20gi.png"     alt="Gi" draggable="false"></div>
+          <div class="photo-card" data-idx="2"><img src="assets/foto%20gi%202.png" alt="Gi" draggable="false"></div>
+          <div class="photo-card" data-idx="3"><img src="assets/foto%20gi%203.png" alt="Gi" draggable="false"></div>
         </div>
 
         <div class="folder-back" id="folderBack">
@@ -397,6 +424,15 @@ document.addEventListener('DOMContentLoaded', () => {
   if (t2)   setTimeout(() => t2.classList.add('visible'),   340);
   if (meta) setTimeout(() => meta.classList.add('visible'), 620);
   if (fw)   setTimeout(() => fw.classList.add('drop-in'),   820);
+
+  /* Mobile: start idle float + glow after entrance (820ms delay + ~950ms animation) */
+  setTimeout(() => {
+    if (!isMobile()) return;
+    fw.classList.add('idle');
+    folderFront.classList.add('glow');
+    /* Peek once: cards fan slightly above the flap, then close back */
+    setTimeout(doPeek, 700);
+  }, 1900);
 
   /* ─── Elements ─── */
   const folderBack  = document.getElementById('folderBack');
@@ -447,6 +483,26 @@ document.addEventListener('DOMContentLoaded', () => {
     setGalDots(galIdx);
   }
 
+  /* ─── Peek animation (mobile only, fires once after entrance) ─── */
+  function doPeek() {
+    if (!isMobile()) return;
+    cards.forEach((c, i) => {
+      const o  = i - Math.floor(N / 2);
+      const tx = o * 20;
+      const ty = o * -5 - 26;
+      const r  = o * 6;
+      const sc = 1 - Math.abs(o) * 0.02;
+      c.style.transition = `transform .55s cubic-bezier(.34,1.56,.64,1) ${i * 55}ms`;
+      c.style.transform  = `translateX(${tx}px) translateY(${ty}px) rotate(${r}deg) scale(${sc})`;
+    });
+    setTimeout(() => {
+      cards.forEach((c, i) => {
+        c.style.transition = `transform .5s cubic-bezier(.34,1.56,.64,1) ${i * 40}ms`;
+      });
+      applyStacked(false);
+    }, 1400);
+  }
+
   /* ─── Gallery open / close ─── */
   function openGallery() {
     galIdx = 0;
@@ -456,7 +512,9 @@ document.addEventListener('DOMContentLoaded', () => {
     gal.style.transform = '';
     gal.style.opacity   = '';
     gal.classList.add('open');
-    document.body.style.overflow = 'hidden'; // redundant but safe
+    /* pause idle while gallery is open */
+    fw.classList.remove('idle');
+    folderFront.classList.remove('glow');
   }
 
   function closeGallery(fast = false) {
@@ -469,6 +527,11 @@ document.addEventListener('DOMContentLoaded', () => {
       gal.style.transition = '';
       gal.style.transform  = '';
       gal.style.opacity    = '';
+      /* resume idle after gallery closes */
+      if (isMobile()) {
+        fw.classList.add('idle');
+        folderFront.classList.add('glow');
+      }
     }, dur);
   }
 
