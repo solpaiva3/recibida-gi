@@ -214,6 +214,22 @@ body::before {
 }
 .drag-hint.visible { opacity:1; transform:translateX(-50%) translateY(0); }
 
+/* Mobile-only hint below the folder */
+.mobile-hint {
+  display: none;
+  margin-top: 18px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .03em;
+  text-align: center;
+  color: rgba(179,61,92,.45);
+  max-width: 240px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.mobile-hint.visible { opacity: 1; transform: translateY(0); }
+
 /* ================================================================
    MOBILE — separate gallery overlay
    ================================================================ */
@@ -233,6 +249,7 @@ body::before {
   .hero-text    { gap: 32px; }
   .title        { gap: 10px; }
   .meta-line    { font-size:11px; letter-spacing:.14em; }
+  .mobile-hint  { display: block; }
 }
 
 /* ── Gallery overlay ── */
@@ -407,6 +424,8 @@ body::before {
         </div>
       </div>
     </div>
+
+    <p class="mobile-hint" id="mobileHint">tocá la carpeta para ver los recaditos de la Dra. y la mini Gi</p>
   </div>
 
   <!-- Desktop hint -->
@@ -430,10 +449,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const t2   = document.getElementById('t2hero');
   const meta = document.getElementById('eventMeta');
   const fw   = document.getElementById('folderWrap');
+  const hint = document.getElementById('mobileHint');
   if (t1)   setTimeout(() => t1.classList.add('visible'),   150);
   if (t2)   setTimeout(() => t2.classList.add('visible'),   340);
   if (meta) setTimeout(() => meta.classList.add('visible'), 620);
   if (fw)   setTimeout(() => fw.classList.add('drop-in'),   820);
+  if (hint) setTimeout(() => hint.classList.add('visible'), 1300);
 
   /* Mobile: start idle float + glow after entrance (820ms delay + ~950ms animation) */
   setTimeout(() => {
@@ -525,6 +546,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /* pause idle while gallery is open */
     fw.classList.remove('idle');
     folderFront.classList.remove('glow');
+    if (hint) hint.classList.remove('visible');
   }
 
   function closeGallery(fast = false) {
@@ -541,6 +563,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (isMobile()) {
         fw.classList.add('idle');
         folderFront.classList.add('glow');
+        if (hint) hint.classList.add('visible');
       }
     }, dur);
   }
